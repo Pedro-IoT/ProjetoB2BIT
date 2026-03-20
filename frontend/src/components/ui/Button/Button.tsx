@@ -17,10 +17,10 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const baseStyles =
-    'font-medium transition-colors duration-200 flex items-center justify-center';
+    'font-medium transition-colors duration-200 flex items-center justify-center cursor-pointer';
   const variantStyles = {
     primary:
-      'rounded-full w-full bg-primary text-white hover:bg-bg-100 hover:text-primary py-3 text-lg shadow-xs',
+      'rounded-full w-full bg-primary text-white filter hover:brightness-125 py-3 text-lg shadow-xs',
     secondary:
       'rounded-full w-full bg-transparent text-white outline outline-1 outline-secondary-400',
     post: 'rounded-full w-full bg-primary text-white',

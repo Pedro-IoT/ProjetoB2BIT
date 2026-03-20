@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router';
 
 export const LoginPage = () => {
   return (
-    <div className="bg-bg-100 flex min-h-screen justify-center px-4 pt-30">
+    <div className="bg-bg-100 flex h-full justify-center px-4 pt-30">
       <div className="w-full max-w-120 rounded-2xl">
         <h1 className="text-primary mb-14 text-center text-[40px] leading-[120%] font-bold tracking-[-0.27px]">
           Mini Twitter

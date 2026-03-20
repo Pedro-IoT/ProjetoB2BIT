@@ -1,17 +1,19 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { login, register } from '@/services/ApiService';
+import { useAuthStore } from '@/store/authStore';
 import { toast } from 'react-toastify';
 
 export const useLogin = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const setToken = useAuthStore(state => state.setToken);
   const loginMutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       login({ email, password }),
     mutationKey: ['login'],
     onSuccess: data => {
-      localStorage.setItem('token', data.token);
+      setToken(data.token);
       navigate({ to: '/feed' });
     },
     onError: () => {
