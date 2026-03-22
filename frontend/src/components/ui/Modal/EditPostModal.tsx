@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -34,6 +35,7 @@ export const EditPostModal = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<EditPostFormData>({
     resolver: zodResolver(editPostSchema),
@@ -44,13 +46,27 @@ export const EditPostModal = ({
     },
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        title: post.title,
+        content: post.content,
+        imageUrl: post.image || '',
+      });
+    }
+  }, [isOpen, post, reset]);
+
   const onSubmit = async (data: EditPostFormData) => {
-    await editPost(post.id, {
-      title: data.title,
-      content: data.content,
-      ...(data.imageUrl && { image: data.imageUrl }),
-    });
-    onClose();
+    try {
+      await editPost(post.id, {
+        title: data.title,
+        content: data.content,
+        ...(data.imageUrl && { image: data.imageUrl }),
+      });
+      onClose();
+    } catch (error) {
+      console.error('Erro ao editar post:', error);
+    }
   };
 
   if (!isOpen) return null;
@@ -73,10 +89,14 @@ export const EditPostModal = ({
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label
+              htmlFor="edit-post-title"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
               Titulo
             </label>
             <input
+              id="edit-post-title"
               {...register('title')}
               className={`w-full rounded-md border p-2 focus:outline-none dark:border-gray-500 ${
                 errors.title
@@ -92,10 +112,14 @@ export const EditPostModal = ({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label
+              htmlFor="edit-post-content"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
               Conteudo
             </label>
             <textarea
+              id="edit-post-content"
               {...register('content')}
               rows={4}
               className={`w-full resize-none rounded-md border p-2 focus:outline-none dark:border-gray-500 ${
@@ -112,10 +136,14 @@ export const EditPostModal = ({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label
+              htmlFor="edit-post-image-url"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
               URL da Imagem (opcional)
             </label>
             <input
+              id="edit-post-image-url"
               {...register('imageUrl')}
               className={`w-full rounded-md border p-2 focus:outline-none dark:border-gray-500 ${
                 errors.imageUrl
